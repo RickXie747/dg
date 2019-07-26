@@ -9,21 +9,52 @@ int main() {
   std::vector<std::string> v{"a", "b", "c", "d"};
   gdwg::Graph<std::string, int> a{v.begin(), v.end()};
 
-  std::cout << a << '\n';
+  std::cout << "--- a --- \n" << a << "\n";
 
   std::string s1{"apple"};
   std::string s2{"orange"};
-  auto e1 = std::make_tuple(s1, s2, 5.4);
-  auto e = std::vector<std::tuple<std::string, std::string, double>>{e1};
-  gdwg::Graph<std::string, double> b{e.begin(), e.end()};
+  std::string s3{"blueberry"};
+  auto b11 = std::make_tuple(s1, s2, 5.4);
+  auto b12 = std::make_tuple(s2, s3, 4.9);
+  auto b2 = std::vector<std::tuple<std::string, std::string, double>>{b11, b12};
+  gdwg::Graph<std::string, double> b{b2.begin(), b2.end()};
 
-  std::cout << b << '\n';
+  std::cout << "--- b --- \n" << b << "\n";
 
   gdwg::Graph<char, std::string> c{'a', 'b', 'x', 'y'};
-  std::cout << c << '\n';
+  std::cout << "--- c --- \n" << c << "\n";
 
   gdwg::Graph<std::string, double> d{b};
-  std::cout << d << '\n';
+  std::cout << "--- d --- \n" << d << "\n";
+
+  gdwg::Graph<std::string, double> e{std::move(d)};
+  std::cout << "--- e --- \n" << e << "\n";
+
+  std::cout << "--- d --- \n" << d << "\n";
+
+  auto f = a;
+  std::cout << "--- a --- \n" << a << "\n";
+  std::cout << "--- f --- \n" << f << "\n";
+
+  auto g = std::move(a);
+  std::cout << "--- a --- \n" << a << "\n";
+  std::cout << "--- g --- \n" << f << "\n";
+
+  auto boo1 = g.InsertNode("a");
+  std::cout << boo1 << "\n";
+  std::cout << "--- g --- \n" << g << "\n";
+  auto boo2 = g.InsertNode("eeeeeee");
+  std::cout << boo2 << "\n";
+  std::cout << "--- g --- \n" << g << "\n";
+
+  g.DeleteNode("b");
+  std::cout << "--- g --- \n" << g << "\n";
+
+  std::cout << "--- b --- \n" << b << "\n";
+  b.MergeReplace("orange", "apple");
+  std::cout << "--- b --- \n" << b << "\n";
+
+
 
 
   // g.InsertNode("hello");
