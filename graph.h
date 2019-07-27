@@ -181,6 +181,52 @@ class Graph {
         return flag;                
     }
 
+    //Clear
+    void Clear() {
+        this->node_.clear();
+        this->edge_.clear();
+    }
+
+    //IsNode
+    bool IsNode(const N& val) {
+        for (auto it = this->node_.begin(); it != this->node_.end(); ) {
+            if (val == (*it)[0]) {
+               return true;
+            } 
+        }
+        return false;
+    }
+
+    //IsConnected
+    bool IsConnected(const N& src, const N& dst) {
+        for (auto it = this->edge_.begin(); it != this->edge_.end(); ++it) {
+            if (src == std::get<0>((*it)[0]) && dst == std::get<1>((*it)[0])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //GetNodes
+    std::vector<N> GetNodes() {
+        std::vector<N> result;
+        for (auto it = this->node_.begin(); it != this->node_.end(); ++it) {
+            result.push_back((*it)[0]);
+        }
+        return result;
+    }
+
+    //GetWeights
+    std::vector<E> GetWeights(const N& src, const N& dst) {
+        std::vector<N> result;
+        for (auto it = this->edge_.begin(); it != this->edge_.end(); ++it) {
+            if (src == std::get<0>((*it)[0]) && dst == std::get<1>((*it)[0])) {
+                result.push_back(std::get<2>((*it)[0]));
+            }
+        }
+        return false;
+    }
+
 //Friends
         friend std::ostream& operator<<(std::ostream& os, const gdwg::Graph<N, E>& g){    
         for (auto it_n = g.node_.begin(); it_n != g.node_.end(); ++it_n) {
