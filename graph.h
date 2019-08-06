@@ -61,6 +61,14 @@ class Graph {
 	 		const_iterator(typename std::vector <std::unique_ptr<std::tuple<N, N, E>[]>>::const_iterator x) {
 	 			current = x;
 			 }
+			// copy constructor
+			const_iterator(const const_iterator& other) {
+	 			this->current = other.current;
+			 }
+			// copy assignment
+			const_iterator& operator =(const const_iterator& other) {
+	 			return *this;
+			}
 			bool operator != (const const_iterator & rhs) {
 				return this->current != rhs.current;
 			}
@@ -109,7 +117,16 @@ class Graph {
 	 		// iterator constructor
 	 		const_reverse_iterator(typename std::vector <std::unique_ptr<std::tuple<N, N, E>[]>>::const_reverse_iterator x) {
 	 			current = x;
+	 		} 
+	 		// copy constructor
+			const_reverse_iterator(const const_reverse_iterator& other) {
+	 			this->current = other.current;
 			 }
+			// copy assignment
+			const_reverse_iterator& operator =(const const_reverse_iterator& other) {
+	 			return *this;
+			}
+			
 			bool operator != (const const_reverse_iterator & rhs) {
 				return this->current != rhs.current;
 			}
@@ -352,6 +369,7 @@ class Graph {
         }
         return false;
     }
+    
     // begin()
     const_iterator begin() {
     	return const_iterator(edge_.begin());
@@ -384,6 +402,38 @@ class Graph {
 	const_reverse_iterator crend() {
     	return const_reverse_iterator(edge_.rend());
 	}
+	//find edge
+	const_iterator find(const N& src, const N& dst, const E& w) {
+		for (auto iter = edge_.begin();iter != edge_.end(); ++iter){
+  			if ((std::get<0>((*iter)[0]) == src) && (std::get<1>((*iter)[0]) == dst ) && (std::get<2>((*iter)[0]) == w)) {
+  				return const_iterator(iter);
+			  }  
+  		}
+		return const_iterator(edge_.end());
+	} 
+	//erase edge
+	bool erase(const N& src, const N& dst, const E& w) {
+		for (auto iter = edge_.begin();iter != edge_.end(); ++iter){
+  			if ((std::get<0>((*iter)[0]) == src) && (std::get<1>((*iter)[0]) == dst ) && (std::get<2>((*iter)[0]) == w)) {
+  				edge_.erase(iter);
+  				return true;
+			  }  
+  		}
+		return false;	
+	}
+	// erase edge ver.2
+	const_iterator erase(const_iterator it) {
+		
+		for (auto iter = edge_.begin();iter != edge_.end(); ++iter){
+  			if ((std::get<0>((*iter)[0]) == std::get<0>((*it)[0])) && (std::get<1>((*iter)[0]) == std::get<1>((*it)[0]) ) && (std::get<2>((*iter)[0]) == std::get<2>((*it)[0]))) {
+  				return const_iterator(edge_.erase(iter));
+			  }  
+  		}
+		return const_iterator(edge_.end());
+		
+	}
+	
+	
 	
 	
 	
