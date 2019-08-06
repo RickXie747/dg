@@ -101,6 +101,7 @@ class Graph {
             edge_tmp[0] = (*it)[0];
             this->edge_.push_back(std::move(edge_tmp));
         }
+        this->sort();
         return *this;
     }
 
@@ -108,6 +109,7 @@ class Graph {
     Graph<N, E>& operator=(gdwg::Graph<N, E>&& rhs) noexcept {
         this->node_ = std::move(rhs.node_);
         this->edge_ = std::move(rhs.edge_);
+        this->sort();
         return *this;
     }
 
@@ -128,16 +130,22 @@ class Graph {
 
     //InsertEdge
     bool InsertEdge(const N& src, const N& dst, const E& w) {
-        auto flag = false;
-        for (auto it = this->edge_.begin(); it != this->edge_.end(); ++it) {
-            if (src == std::get<0>((*it)[0]) || dst == std::get<1>((*it)[0])) {
-                flag = true;
+        auto flag_1 = false;
+        auto flag_2 = false;
+        for (auto it = this->node_.begin(); it != this->node_.end(); ++it) {
+            if (src == (*it)[0]) {
+                flag_1 = true;
             }
+            if (dst == (*it)[0]) {
+                flag_2 = true;
+            }
+        }
+        for (auto it = this->edge_.begin(); it != this->edge_.end(); ++it) {
             if (src == std::get<0>((*it)[0]) && dst == std::get<1>((*it)[0]) && w == std::get<2>((*it)[0])) {
                 return false;
             }
         }
-        if (flag == false) {
+        if ((flag_1 || flag_2)== false) {
             throw std::runtime_error("Cannot call Graph::InsertEdge when either src or dst node does not exist");
         }
         auto edge_tmp = std::make_unique <std::tuple<N, N, E>[]>(1);
@@ -292,7 +300,7 @@ class Graph {
     }
 
 //Friends
-        friend std::ostream& operator<<(std::ostream& os, const gdwg::Graph<N, E>& g){   
+    friend std::ostream& operator<<(std::ostream& os, const gdwg::Graph<N, E>& g){   
         for (auto it_n = g.node_.begin(); it_n != g.node_.end(); ++it_n) {
             os << (*it_n)[0] << "(\n"; 
             for (auto it_e = g.edge_.begin(); it_e != g.edge_.end(); ++it_e) {
@@ -303,6 +311,45 @@ class Graph {
             os << ")\n";
         }
         return os;
+    }
+
+    friend bool operator==(const gdwg::Graph<N, E>& lhs, const gdwg::Graph<N, E>& rhs) {
+        auto it_r1 = rhs.node_.begin();
+        for (auto it_l = lhs.node_.begin(); it_l != lhs.node_.end(); ++it_l) {
+            std::cout << (*it_l)[0] << " and " << (*it_r1)[0]<<"\n" ;
+            if ((*it_l)[0] != (*it_r1)[0]) {
+                return false;
+            }
+            it_r1++;
+        }
+        auto it_r2 = rhs.edge_.begin();
+        for (auto it_l = lhs.edge_.begin(); it_l != lhs.edge_.end(); ++it_l) {
+            if (std::get<0>((*it_l)[0]) != std::get<0>((*it_r2)[0]) || std::get<1>((*it_l)[0]) != std::get<1>((*it_r2)[0]) || std::get<2>((*it_l)[0]) != std::get<2>((*it_r2)[0])) {
+                return false;
+            }
+            it_r2++;
+        }
+        return true;
+    }
+
+    friend bool operator!=(const gdwg::Graph<N, E>& lhs, const gdwg::Graph<N, E>& rhs) {
+        auto result = false;
+        auto it_r1 = rhs.node_.begin();
+        for (auto it_l = lhs.node_.begin(); it_l != lhs.node_.end(); ++it_l) {
+            std::cout << (*it_l)[0] << " and " << (*it_r1)[0]<<"\n" ;
+            if ((*it_l)[0] != (*it_r1)[0]) {
+                result = true;
+            }
+            it_r1++;
+        }
+        auto it_r2 = rhs.edge_.begin();
+        for (auto it_l = lhs.edge_.begin(); it_l != lhs.edge_.end(); ++it_l) {
+            if (std::get<0>((*it_l)[0]) != std::get<0>((*it_r2)[0]) || std::get<1>((*it_l)[0]) != std::get<1>((*it_r2)[0]) || std::get<2>((*it_l)[0]) != std::get<2>((*it_r2)[0])) {
+                result = true;
+            }
+            it_r2++;
+        }
+        return result;
     }
 
  private:
