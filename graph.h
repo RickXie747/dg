@@ -145,7 +145,7 @@ class Graph {
                 return false;
             }
         }
-        if ((flag_1 || flag_2)== false) {
+        if ((flag_1 && flag_2)== false) {
             throw std::runtime_error("Cannot call Graph::InsertEdge when either src or dst node does not exist");
         }
         auto edge_tmp = std::make_unique <std::tuple<N, N, E>[]>(1);
@@ -302,7 +302,7 @@ class Graph {
 //Friends
     friend std::ostream& operator<<(std::ostream& os, const gdwg::Graph<N, E>& g){   
         for (auto it_n = g.node_.begin(); it_n != g.node_.end(); ++it_n) {
-            os << (*it_n)[0] << "(\n"; 
+            os << (*it_n)[0] << " (\n"; 
             for (auto it_e = g.edge_.begin(); it_e != g.edge_.end(); ++it_e) {
                 if ((*it_n)[0] == std::get<0>((*it_e)[0])) {
                     os << "  " << std::get<1>((*it_e)[0]) << " | " << std::get<2>((*it_e)[0]) << "\n";
