@@ -377,7 +377,14 @@ class Graph {
         if (edge_.size() > 0) {
             for (int i = edge_.size() - 1; i > -1; i--) {
                 for (int j = 0; j < i; j ++) {
-                    if (std::get<1>(edge_[j][0]) > std::get<1>(edge_[j + 1][0])) {
+                    if (std::get<0>(edge_[j][0]) > std::get<0>(edge_[j + 1][0])) {
+                        std::swap(edge_[j][0], edge_[j + 1][0]);
+                    } 
+                }
+            }
+            for (int i = edge_.size() - 1; i > -1; i--) {
+                for (int j = 0; j < i; j ++) {
+                    if (std::get<0>(edge_[j][0]) == std::get<0>(edge_[j + 1][0] && std::get<1>(edge_[j][0]) > std::get<1>(edge_[j + 1][0])) {
                         std::swap(edge_[j][0], edge_[j + 1][0]);
                     }
                     else if (std::get<1>(edge_[j][0]) == std::get<1>(edge_[j + 1][0]) && std::get<2>(edge_[j][0]) > std::get<2>(edge_[j + 1][0])) {
