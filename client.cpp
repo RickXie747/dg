@@ -54,7 +54,43 @@ int main() {
   b.MergeReplace("orange", "apple");
   std::cout << "--- b --- \n" << b << "\n";
 
+  std::cout << "now clear";
+  b.Clear();
+  std::cout << "--- b --- \n" << b << "\n";
 
+  auto ss11 = std::make_tuple(500, 10, 5.4);
+  auto ss12 = std::make_tuple(10, 200, 4.9);
+  auto ss13 = std::make_tuple(6, 500, 10.8);
+  auto ss14 = std::make_tuple(6, 500, 10.8);
+  auto ss15 = std::make_tuple(500, 6, 9.9);
+  auto ss2 = std::vector<std::tuple<int, int, double>>{ss11, ss12, ss13, ss14, ss15};
+  gdwg::Graph<int, double> ss{ss2.begin(), ss2.end()};
+  std::cout << "--- ss --- \n" << ss << "\n";
+
+  auto ss_1 = ss.IsNode(500);
+  std::cout << "--- ss_1 --- \n" << ss_1 << "\n";
+  auto ss_2 = ss.IsConnected(500, 10);
+  std::cout << "--- ss_2 --- \n" << ss_2 << "\n";
+  auto ss_3 = ss.IsConnected(500, 200);
+  std::cout << "--- ss_3 --- \n" << ss_3 << "\n";
+  std::cout << "--- ss_4---- \n";
+  auto ss_4 = ss.GetNodes();
+  for (auto it = ss_4.begin(); it != ss_4.end(); ++it) {
+    std::cout << *it << " ";
+  }
+  std::cout << "\n";
+  std::cout << "--- ss_5---- \n";
+  auto ss_5 = ss.GetConnected(500);
+  for (auto it = ss_5.begin(); it != ss_5.end(); ++it) {
+    std::cout << *it << " ";
+  }
+  std::cout << "\n";
+  std::cout << "--- ss_6---- \n";
+  auto ss_6 = ss.GetWeights(500, 10);
+  for (auto it = ss_6.begin(); it != ss_6.end(); ++it) {
+    std::cout << *it << " ";
+  }
+  std::cout << "\n";
 
 
   // g.InsertNode("hello");
