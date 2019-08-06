@@ -53,10 +53,12 @@ class Graph {
  public:
 	class const_iterator {
 	 	public:
+	 		using iterator_category = std::bidirectional_iterator_tag;
 	 		using value_type = std::tuple<N, N, E>;
-	 		// using reference = std::tuple<const N&, const N&, const E& >;
+	 		using reference = std::tuple<const N&, const N&, const E& >;
+	 		using difference_type = int;
 	 		// iterator constructor
-	 		const_iterator(typename std::vector <std::unique_ptr<std::tuple<N, N, E>[]>>::iterator x) {
+	 		const_iterator(typename std::vector <std::unique_ptr<std::tuple<N, N, E>[]>>::const_iterator x) {
 	 			current = x;
 			 }
 			bool operator != (const const_iterator & rhs) {
@@ -71,18 +73,82 @@ class Graph {
 				return *this;
 			}
 			//postfix increment
-			const_iterator& operator++ (int unused) {
+			const_iterator operator++ (int unused) {
 				current++;
 				return *this;
 			}
-			typename std::unique_ptr<std::tuple<N, N, E>[]>& operator*() {
-				return *current;
+			// prefix decrement
+			const_iterator& operator-- () {
+				current--;
+				return *this;
 			}
-	 	
+			//postfix decrement
+			const_iterator operator-- (int unused) {
+				current--;
+				return *this;
+			}
+//			const typename std::unique_ptr<std::tuple<N, N, E>[]>& operator*() const{
+//				return *current;
+//			}
+			const reference operator*() const{
+				return (*current)[0];
+			}
+	 		reference operator*() {
+				return (*current)[0];
+			}
 	 	private:
-	 		typename std::vector <std::unique_ptr<std::tuple<N, N, E>[]>>::iterator current; 
+	 		typename std::vector <std::unique_ptr<std::tuple<N, N, E>[]>>::const_iterator current; 
 	 	
-	 }; 
+	 };
+	 class const_reverse_iterator {
+	 	public:
+	 		using iterator_category = std::bidirectional_iterator_tag;
+	 		using value_type = std::tuple<N, N, E>;
+	 		using reference = std::tuple<const N&, const N&, const E& >;
+	 		using difference_type = int;
+	 		// iterator constructor
+	 		const_reverse_iterator(typename std::vector <std::unique_ptr<std::tuple<N, N, E>[]>>::const_reverse_iterator x) {
+	 			current = x;
+			 }
+			bool operator != (const const_reverse_iterator & rhs) {
+				return this->current != rhs.current;
+			}
+			bool operator == (const const_reverse_iterator & rhs) {
+				return this->current == rhs.current;
+			}
+			// prefix increment
+			const_reverse_iterator& operator++ () {
+				current++;
+				return *this;
+			}
+			//postfix increment
+			const_reverse_iterator operator++ (int unused) {
+				current++;
+				return *this;
+			}
+			// prefix decrement
+			const_reverse_iterator& operator-- () {
+				current--;
+				return *this;
+			}
+			// postfix decrement
+			const_reverse_iterator operator-- (int unused) {
+				current--;
+				return *this;
+			}
+//			const typename std::unique_ptr<std::tuple<N, N, E>[]>& operator*() const{
+//				return *current;
+//			}
+	 		const reference operator*() const{
+				return (*current)[0];
+			}
+	 		reference operator*() {
+				return (*current)[0];
+			}
+	 	private:
+	 		typename std::vector <std::unique_ptr<std::tuple<N, N, E>[]>>::const_reverse_iterator current; 
+	 	
+	 };  
 //Constructors & Destructors
 
     //Default Constructor
@@ -290,9 +356,37 @@ class Graph {
     const_iterator begin() {
     	return const_iterator(edge_.begin());
 	}
+	//cbegin()
+	const_iterator cbegin() {
+    	return const_iterator(edge_.begin());
+	}
+	// rbegin()
+	const_reverse_iterator rbegin() {
+    	return const_reverse_iterator(edge_.rbegin());
+	}
+	// crbegin()
+	const_reverse_iterator crbegin() {
+    	return const_reverse_iterator(edge_.rbegin());
+	}
+	// end()
 	const_iterator end() {
     	return const_iterator(edge_.end());
 	}
+	// cend()
+	const_iterator cend() {
+    	return const_iterator(edge_.end());
+	}
+	// rend()
+	const_reverse_iterator rend() {
+    	return const_reverse_iterator(edge_.rend());
+	}
+	// crend()
+	const_reverse_iterator crend() {
+    	return const_reverse_iterator(edge_.rend());
+	}
+	
+	
+	
 	
 //Friends
     friend std::ostream& operator<<(std::ostream& os, const gdwg::Graph<N, E>& g){    
